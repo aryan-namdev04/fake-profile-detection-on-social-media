@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fake Profile Detector</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="logo">🔍</div>
+      <h1>Fake Profile Detector</h1>
+      <p class="subtitle">Analyze social media profiles for authenticity signals</p>
+    </header>
+
+    <!-- Demo profiles -->
+    <section class="demo-bar">
+      <span>Try a demo:</span>
+      <div id="demoButtons" class="demo-buttons"></div>
+    </section>
+
+    <!-- Input form -->
+    <form id="profileForm" class="card">
+      <div class="form-grid">
+        <div class="field">
+          <label for="username">Username *</label>
+          <input type="text" id="username" placeholder="e.g. john_doe123" required />
+        </div>
+        <div class="field">
+          <label for="accountAgeDays">Account Age (days)</label>
+          <input type="number" id="accountAgeDays" placeholder="e.g. 365" min="0" />
+        </div>
+        <div class="field">
+          <label for="followers">Followers</label>
+          <input type="number" id="followers" placeholder="e.g. 500" min="0" />
+        </div>
+        <div class="field">
+          <label for="following">Following</label>
+          <input type="number" id="following" placeholder="e.g. 300" min="0" />
+        </div>
+        <div class="field">
+          <label for="postCount">Post Count</label>
+          <input type="number" id="postCount" placeholder="e.g. 42" min="0" />
+        </div>
+        <div class="field">
+          <label for="avgEngagement">Avg Engagement / Post</label>
+          <input type="number" id="avgEngagement" placeholder="e.g. 12.5" min="0" step="0.1" />
+        </div>
+        <div class="field full">
+          <label for="bio">Bio</label>
+          <input type="text" id="bio" placeholder="e.g. Travel enthusiast | Coffee addict" />
+        </div>
+        <div class="field checkbox-field">
+          <label>
+            <input type="checkbox" id="hasProfilePicture" />
+            Has Profile Picture
+          </label>
+        </div>
+        <div class="field checkbox-field">
+          <label>
+            <input type="checkbox" id="hasExternalLink" />
+            Has External Link
+          </label>
+        </div>
+      </div>
+      <button type="submit" id="analyzeBtn">Analyze Profile</button>
+    </form>
+
+    <!-- Results -->
+    <section id="results" class="hidden">
+      <div class="card result-card">
+        <div class="score-ring-wrap">
+          <svg class="score-ring" viewBox="0 0 120 120" aria-hidden="true">
+            <circle class="ring-bg" cx="60" cy="60" r="50" />
+            <circle class="ring-fill" id="ringFill" cx="60" cy="60" r="50" />
+          </svg>
+          <div class="score-center">
+            <span id="scoreValue" class="score-number">0</span>
+            <span class="score-label">Risk Score</span>
+          </div>
+        </div>
+        <div class="verdict-wrap">
+          <span id="verdictBadge" class="verdict-badge">—</span>
+          <p id="verdictDesc" class="verdict-desc"></p>
+        </div>
+      </div>
+
+      <div class="card checks-card">
+        <h2>Signal Breakdown</h2>
+        <ul id="checksList" class="checks-list"></ul>
+      </div>
+    </section>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
