@@ -10,9 +10,36 @@
   <div class="container">
     <header>
       <div class="logo">🔍</div>
-      <h1>Fake Profile Detector</h1>
+      <h2 id="welcomeUser"></h2>
+      <h1>Fake Profile Detector On Social Media</h1>
       <p class="subtitle">Analyze social media profiles for authenticity signals</p>
+       <button id="logoutBtn">Logout</button>
     </header>
+
+    <section class="card dashboard-card">
+
+    <h2>Dashboard</h2>
+
+    <div class="dashboard-grid">
+
+        <div class="dashboard-box">
+            <h3 id="totalAnalyses">0</h3>
+            <p>Total Analyses</p>
+        </div>
+
+        <div class="dashboard-box">
+            <h3 id="genuineProfiles">0</h3>
+            <p>Likely Genuine</p>
+        </div>
+
+        <div class="dashboard-box">
+            <h3 id="suspiciousProfiles">0</h3>
+            <p>Suspicious Profiles</p>
+        </div>
+
+    </div>
+
+</section>
 
     <!-- Demo profiles -->
     <section class="demo-bar">
@@ -91,6 +118,19 @@
         <ul id="checksList" class="checks-list"></ul>
       </div>
     </section>
+    <section class="card">
+    <h2>Analysis History</h2>
+    <input
+    type="text"
+    id="searchHistory"
+    placeholder="🔍 Search by username..."
+>
+
+<div id="historyList"></div>
+    <div id="historyList">
+
+    </div>
+</section>
   </div>
 
   <script src="app.js"></script>
