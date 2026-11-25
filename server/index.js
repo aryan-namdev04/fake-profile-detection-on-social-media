@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const path = require("path");
@@ -7,11 +8,12 @@ const User = require("./models/User");
 const Analysis = require("./models/Analysis");
 const bcrypt = require("bcrypt");
 const session = require("express-session");
+const { generateExplanation } = require("./aiExplanation");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-const MONGO_URL = "mongodb://127.0.0.1:27017/fakeProfileDB";
+const MONGO_URL = process.env.MONGO_URL || "mongodb://127.0.0.1:27017/fakeProfileDB";
 
 main()
   .then(() => {
@@ -38,7 +40,7 @@ async function main() {
 app.use(cors());
 app.use(express.json());
 app.use(session({
-  secret: "fakeprofilesecret",
+  secret: process.env.SESSION_SECRET || "fakeprofile_local_secret_12345",
   resave: false,
   saveUninitialized: false,
 }));
@@ -222,6 +224,43 @@ app.post("/api/analyze", isLoggedIn, async (req, res) => {
   await analysis.save();
   res.json(result);
 });
+
+
+app.post("/api/ai-explanation", isLoggedIn, async (req, res) => {
+  try {
+    const { riskScore, verdict, checks } = req.body;
+
+    if (
+      typeof riskScore !== "number" ||
+      typeof verdict !== "string" ||
+      !Array.isArray(checks)
+    ) {
+      return res.status(400).json({
+        success: false,
+        message: "Valid analysis result is required.",
+      });
+    }
+
+    const explanation = await generateExplanation({
+      riskScore,
+      verdict,
+      checks,
+    });
+
+    res.json({
+      success: true,
+      explanation,
+    });
+  } catch (err) {
+    console.error("AI explanation error:", err.message);
+
+    res.status(500).json({
+      success: false,
+      message: "Unable to generate AI explanation right now.",
+    });
+  }
+});
+
 
 
 app.get("/api/history", isLoggedIn, async (req, res) => {

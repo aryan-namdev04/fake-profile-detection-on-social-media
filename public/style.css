@@ -381,3 +381,15 @@ button[type="submit"]:disabled { opacity: .5; cursor: not-allowed; }
     font-weight: 600;
 
 }
+
+
+
+
+.ai-explanation h2 {
+  margin-bottom: 12px;
+}
+
+#aiExplanationText {
+  line-height: 1.7;
+  white-space: pre-wrap;
+}

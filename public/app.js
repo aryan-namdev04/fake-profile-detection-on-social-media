@@ -98,38 +98,38 @@ async function loadHistory() {
 
 searchHistory.addEventListener("input", () => {
 
-    const value = searchHistory.value.toLowerCase();
+  const value = searchHistory.value.toLowerCase();
 
-    const filtered = historyData.filter((item)=>{
+  const filtered = historyData.filter((item) => {
 
-        return item.username.toLowerCase().includes(value);
+    return item.username.toLowerCase().includes(value);
 
-    });
+  });
 
-    renderHistory(filtered);
+  renderHistory(filtered);
 
 });
 
-function renderHistory(data){
+function renderHistory(data) {
 
-    historyList.innerHTML = "";
+  historyList.innerHTML = "";
 
-    data.forEach((item) => {
+  data.forEach((item) => {
 
-        const date = new Date(item.createdAt);
+    const date = new Date(item.createdAt);
 
-        const formattedDate = date.toLocaleString("en-IN", {
+    const formattedDate = date.toLocaleString("en-IN", {
 
-            day:"2-digit",
-            month:"short",
-            year:"numeric",
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
 
-            hour:"2-digit",
-            minute:"2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
 
-        });
+    });
 
-        historyList.innerHTML += `
+    historyList.innerHTML += `
 
         <div class="history-item">
 
@@ -145,7 +145,7 @@ function renderHistory(data){
 
         `;
 
-    });
+  });
 
 }
 
@@ -266,6 +266,42 @@ function renderResults(data) {
   resultsEl.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
+
+async function loadAIExplanation(data) {
+  const box = document.getElementById("aiExplanationBox");
+  const text = document.getElementById("aiExplanationText");
+
+  box.classList.remove("hidden");
+  text.textContent = "Generating AI explanation... Please wait.";
+
+  try {
+    const response = await fetch(`${API}/ai-explanation`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        riskScore: data.riskScore,
+        verdict: data.verdict,
+        checks: data.checks,
+      }),
+    });
+
+    const result = await response.json();
+
+    if (!response.ok || !result.success) {
+      throw new Error(result.message || "AI explanation failed.");
+    }
+
+    text.textContent = result.explanation;
+  } catch (error) {
+    console.error("AI explanation error:", error);
+    text.textContent =
+      "AI explanation is temporarily unavailable. Please try again.";
+  }
+}
+
+
 // ── Counter animation ─────────────────────────────────────────────────────────
 function animateCounter(el, from, to, duration) {
   const start = performance.now();
@@ -299,10 +335,15 @@ form.addEventListener("submit", async (e) => {
       return;
     }
 
+
     const data = await res.json();
+
     renderResults(data);
+    loadAIExplanation(data);
+
     loadHistory();
     loadDashboard();
+
   } catch (err) {
     alert("Could not reach the server. Make sure it is running on port 3000.");
   } finally {
