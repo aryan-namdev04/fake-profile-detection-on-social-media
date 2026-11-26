@@ -39,10 +39,17 @@ async function main() {
 
 app.use(cors());
 app.use(express.json());
+app.set("trust proxy", 1);
+
 app.use(session({
   secret: process.env.SESSION_SECRET || "fakeprofile_local_secret_12345",
   resave: false,
   saveUninitialized: false,
+  cookie: {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+  },
 }));
 app.use(express.static(path.join(__dirname, "../public")));
 
